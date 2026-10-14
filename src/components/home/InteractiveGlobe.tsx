@@ -233,7 +233,7 @@ export const InteractiveGlobe: React.FC = () => {
         }
       }
 
-      // Draw Hub Pins & Labels
+      // 1. Draw all visible Hub Pins first
       projectedHubs.forEach(({ hub, px, py, z }) => {
         const pinAlpha = Math.max(0.2, (z + 0.1) / 1.1);
 
@@ -254,29 +254,102 @@ export const InteractiveGlobe: React.FC = () => {
         ctx.arc(px, py, 1.5, 0, Math.PI * 2);
         ctx.fillStyle = '#FFFFFF';
         ctx.fill();
+      });
 
-        // Label pill (only if well visible in front)
-        if (z > 0.25) {
-          ctx.font = 'bold 10px monospace';
-          const label = `${hub.name}`;
-          const textWidth = ctx.measureText(label).width;
+      // 2. Draw Hub Labels with multi-directional collision avoidance
+      const isMobile = width < 640;
+      const minZForLabel = isMobile ? 0.22 : 0.16;
 
-          ctx.fillStyle = theme === 'dark' ? 'rgba(18, 20, 26, 0.85)' : 'rgba(255, 255, 255, 0.9)';
-          ctx.strokeStyle = theme === 'dark' ? 'rgba(255, 255, 255, 0.15)' : 'rgba(15, 16, 18, 0.15)';
+      // Sort hubs facing front: India Hub first, then closest z to viewer
+      const labelCandidates = projectedHubs
+        .filter((h) => h.z > minZForLabel)
+        .sort((a, b) => {
+          if (a.hub.name === 'India Hub') return -1;
+          if (b.hub.name === 'India Hub') return 1;
+          return b.z - a.z;
+        });
+
+      const placedBoxes: { x1: number; y1: number; x2: number; y2: number }[] = [];
+      const margin = isMobile ? 4 : 6;
+
+      labelCandidates.forEach(({ hub, px, py }) => {
+        ctx.font = isMobile ? 'bold 9px monospace' : 'bold 10px monospace';
+        const label = hub.name;
+        const textWidth = ctx.measureText(label).width;
+        const pillW = isMobile ? Math.ceil(textWidth + 10) : Math.ceil(textWidth + 12);
+        const pillH = isMobile ? 16 : 18;
+
+        // Try diverse candidate placements around the pin
+        const candidates = [
+          { x: px + 7, y: py - pillH + 2 },             // Top-Right
+          { x: px + 7, y: py + 4 },                     // Bottom-Right
+          { x: px - pillW - 7, y: py - pillH + 2 },     // Top-Left
+          { x: px - pillW - 7, y: py + 4 },             // Bottom-Left
+          { x: Math.round(px - pillW / 2), y: py - pillH - 6 }, // Above Center
+          { x: Math.round(px - pillW / 2), y: py + 8 },         // Below Center
+          { x: px + 9, y: py - pillH - 6 },             // Staggered High Top-Right
+          { x: px - pillW - 9, y: py - pillH - 6 },     // Staggered High Top-Left
+          { x: px + 9, y: py + 8 },                     // Staggered Low Bottom-Right
+          { x: px - pillW - 9, y: py + 8 },             // Staggered Low Bottom-Left
+        ];
+
+        // Find candidate that stays in canvas and doesn't collide with existing labels
+        const chosen = candidates.find((cand) => {
+          // Boundary check
+          if (
+            cand.x < 4 ||
+            cand.y < 4 ||
+            cand.x + pillW > width - 4 ||
+            cand.y + pillH > height - 4
+          ) {
+            return false;
+          }
+
+          // Collision check against already placed labels
+          const overlaps = placedBoxes.some((box) => {
+            return !(
+              cand.x + pillW + margin <= box.x1 ||
+              cand.x - margin >= box.x2 ||
+              cand.y + pillH + margin <= box.y1 ||
+              cand.y - margin >= box.y2
+            );
+          });
+
+          return !overlaps;
+        });
+
+        // Only draw if we found a non-colliding location
+        if (chosen) {
+          placedBoxes.push({
+            x1: chosen.x,
+            y1: chosen.y,
+            x2: chosen.x + pillW,
+            y2: chosen.y + pillH,
+          });
+
+          // Pill Background
+          ctx.fillStyle =
+            theme === 'dark' ? 'rgba(18, 20, 26, 0.92)' : 'rgba(255, 255, 255, 0.95)';
+          ctx.strokeStyle =
+            theme === 'dark' ? 'rgba(255, 255, 255, 0.18)' : 'rgba(15, 16, 18, 0.18)';
           ctx.lineWidth = 1;
 
-          const pillX = px + 8;
-          const pillY = py - 14;
-          const pillW = textWidth + 12;
-          const pillH = 18;
-
           ctx.beginPath();
-          ctx.roundRect(pillX, pillY, pillW, pillH, 5);
+          if (typeof ctx.roundRect === 'function') {
+            ctx.roundRect(chosen.x, chosen.y, pillW, pillH, 5);
+          } else {
+            ctx.rect(chosen.x, chosen.y, pillW, pillH);
+          }
           ctx.fill();
           ctx.stroke();
 
+          // Pill Text
           ctx.fillStyle = theme === 'dark' ? '#F4F4F6' : '#0F1012';
-          ctx.fillText(label, pillX + 6, pillY + 12);
+          ctx.fillText(
+            label,
+            chosen.x + (isMobile ? 5 : 6),
+            chosen.y + (isMobile ? 11.5 : 12.5)
+          );
         }
       });
 
