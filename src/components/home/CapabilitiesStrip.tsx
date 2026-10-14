@@ -32,9 +32,14 @@ export const CapabilitiesStrip: React.FC = () => {
       <div className="absolute left-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-r from-white dark:from-[#101114] to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-16 sm:w-28 bg-gradient-to-l from-white dark:from-[#101114] to-transparent z-10 pointer-events-none" />
 
-      <div className="flex items-center gap-8 animate-marquee whitespace-nowrap will-change-transform">
-        {/* Double the array for seamless infinite marquee loop */}
-        {[...capabilities, ...capabilities, ...capabilities].map((item, idx) => (
+      <div
+        className="flex items-center gap-8 animate-marquee whitespace-nowrap will-change-transform hover:[animation-play-state:paused]"
+        style={{
+          width: 'max-content',
+        }}
+      >
+        {/* Double array for seamless 50% translation infinite loop */}
+        {[...capabilities, ...capabilities].map((item, idx) => (
           <div
             key={idx}
             className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-ethix-ivory-50 dark:bg-white/5 border border-ethix-charcoal-200/60 dark:border-white/10 text-xs font-medium text-ethix-charcoal-800 dark:text-ethix-charcoal-200"

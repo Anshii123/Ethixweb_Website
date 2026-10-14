@@ -59,7 +59,7 @@ export default {
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out forwards',
         'slide-up': 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards',
-        'marquee': 'marquee 35s linear infinite',
+        'marquee': 'marquee 15s linear infinite',
       },
       keyframes: {
         fadeIn: {
