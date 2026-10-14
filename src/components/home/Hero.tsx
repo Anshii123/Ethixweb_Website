@@ -21,25 +21,19 @@ export const Hero: React.FC = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Detect fine pointer devices (desktop mouse) and screen width
-  const [isDesktop, setIsDesktop] = useState(false);
-
+  // Detect fine pointer devices (desktop mouse) for magnetic CTA hover
   useEffect(() => {
-    const checkDesktop = () => {
+    const checkPointer = () => {
       const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-      const wideScreen = window.innerWidth >= 768;
       setIsFinePointer(finePointer);
-      setIsDesktop(finePointer && wideScreen);
     };
-    checkDesktop();
+    checkPointer();
 
     const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
-    const handler = () => checkDesktop();
+    const handler = () => checkPointer();
     mediaQuery.addEventListener('change', handler);
-    window.addEventListener('resize', checkDesktop);
     return () => {
       mediaQuery.removeEventListener('change', handler);
-      window.removeEventListener('resize', checkDesktop);
     };
   }, []);
 
@@ -80,7 +74,7 @@ export const Hero: React.FC = () => {
             </div>
 
             {/* Kinetic Headline */}
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0F1012] dark:text-[#F4F4F6] leading-[1.08]">
+            <h1 className="text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#0F1012] dark:text-[#F4F4F6] leading-[1.08]">
               <span className="block overflow-hidden pb-1">
                 <span className="inline-block animate-hero-line-1">
                   We run the tech.
@@ -99,7 +93,7 @@ export const Hero: React.FC = () => {
             </p>
 
             {/* CTA Buttons */}
-            <div className="animate-hero-fade-2 pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+            <div className="animate-hero-fade-2 pt-2 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4">
               <Link
                 to="/contact"
                 onMouseMove={handleMagneticMove}
@@ -108,7 +102,7 @@ export const Hero: React.FC = () => {
                   transform: `translate3d(${magneticOffset.x}px, ${magneticOffset.y}px, 0)`,
                   transition: magneticOffset.x === 0 ? 'transform 0.3s ease-out' : 'none',
                 }}
-                className="inline-flex items-center justify-center gap-2 bg-ethix-red hover:bg-ethix-red-hover text-white px-7 py-4 rounded-xl font-bold text-sm tracking-wide shadow-subtle hover:shadow-glow-red transition-colors duration-150 group active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ethix-red focus-visible:ring-offset-2 will-change-transform"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-ethix-red hover:bg-ethix-red-hover text-white px-7 py-4 rounded-xl font-bold text-sm tracking-wide shadow-subtle hover:shadow-glow-red transition-colors duration-150 group active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ethix-red focus-visible:ring-offset-2 will-change-transform"
               >
                 <span>Start a Project</span>
                 <ArrowUpRight className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
@@ -116,7 +110,7 @@ export const Hero: React.FC = () => {
 
               <Link
                 to="/our-work"
-                className="inline-flex items-center justify-center gap-2 border border-ethix-charcoal-300 dark:border-white/20 hover:border-ethix-charcoal-900 dark:hover:border-white bg-white/80 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 text-ethix-charcoal-900 dark:text-white px-6 py-4 rounded-xl font-semibold text-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ethix-red"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-ethix-charcoal-300 dark:border-white/20 hover:border-ethix-charcoal-900 dark:hover:border-white bg-white/80 dark:bg-white/5 hover:bg-white dark:hover:bg-white/10 text-ethix-charcoal-900 dark:text-white px-6 py-4 rounded-xl font-semibold text-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ethix-red"
               >
                 <span>See Our Work</span>
               </Link>
@@ -146,19 +140,19 @@ export const Hero: React.FC = () => {
               <div className="absolute inset-0 bg-radial-gradient from-ethix-red/10 via-transparent to-transparent rounded-full blur-2xl pointer-events-none" />
 
               {/* The Interactive 3D WebGL Digital Sculpture with zero-CLS Suspense fallback */}
-              {mountSculpture && isDesktop ? (
+              {mountSculpture ? (
                 <Suspense
                   fallback={
-                    <div className="relative w-full h-[380px] sm:h-[440px] md:h-[480px] lg:h-[520px] flex items-center justify-center select-none">
-                      <SculptureFallback />
+                    <div className="relative w-full h-[350px] xs:h-[390px] sm:h-[440px] md:h-[480px] lg:h-[520px] flex items-center justify-center select-none">
+                      <SculptureFallback showBadges={true} />
                     </div>
                   }
                 >
                   <DigitalSculpture />
                 </Suspense>
               ) : (
-                <div className="relative w-full h-[380px] sm:h-[440px] md:h-[480px] lg:h-[520px] flex items-center justify-center select-none">
-                  <SculptureFallback />
+                <div className="relative w-full h-[350px] xs:h-[390px] sm:h-[440px] md:h-[480px] lg:h-[520px] flex items-center justify-center select-none">
+                  <SculptureFallback showBadges={true} />
                 </div>
               )}
             </div>

@@ -92,8 +92,6 @@ export const ServicesOverview: React.FC = () => {
         { name: 'Technical & Local SEO', desc: 'Audits, schema markup, regional citations, and programmatic search architecture.' },
         { name: 'Google Ads & LSA', desc: 'Precision intent targeting and Google verified badges for qualified inbound calls.' },
         { name: 'Meta Ads & Retargeting', desc: 'High-converting video and carousel campaigns that build predictable customer pipelines.' },
-        { name: 'Social Media & Reels', desc: 'Brand-building organic video content designed for sustained audience engagement.' },
-        { name: 'Email Marketing & Drips', desc: 'Lifecycle sequences, re-engagement funnels, and automated follow-ups.' },
         { name: 'CRM & Pipeline Integrations', desc: 'Connecting HubSpot, GoHighLevel, Zoho, WhatsApp, and booking calendars.' },
       ],
     },
@@ -111,6 +109,7 @@ export const ServicesOverview: React.FC = () => {
       services: [
         { name: 'Custom Operational Dashboards', desc: 'Unified real-time views combining website, marketing, and sales pipeline metrics.' },
         { name: 'Conversion & Funnel Analytics', desc: 'Granular tracking of user drop-offs, button clicks, and transaction funnels.' },
+        { name: 'Behavioral Analytics & Heatmaps', desc: 'Session replay, user interaction heatmaps, and funnel drop-off diagnostics.' },
         { name: 'Monthly Executive Reporting', desc: 'Actionable executive summaries delivered with transparent insights and next steps.' },
       ],
     },
@@ -128,6 +127,8 @@ export const ServicesOverview: React.FC = () => {
       services: [
         { name: 'Accessibility Remediation', desc: 'Code-level fixes for contrast, screen-reader semantics, and keyboard navigation.' },
         { name: 'Accessibility Testing & Audits', desc: 'Rigorous automated and manual evaluations against WCAG AA compliance benchmarks.' },
+        { name: 'ARIA & Screen Reader Semantics', desc: 'Semantic document landmark roles, accessible labels, and keyboard flow.' },
+        { name: 'VPAT & Compliance Filings', desc: 'Formal documentation verifying accessibility adherence for enterprise RFPs.' },
       ],
     },
     {
@@ -145,6 +146,7 @@ export const ServicesOverview: React.FC = () => {
         { name: 'Technical Support & SLA', desc: 'Dedicated engineering hours and guaranteed response times for critical issues.' },
         { name: 'AI & Content Updates', desc: 'Routine fine-tuning of AI prompts, knowledge vectors, and site copy.' },
         { name: 'API & Dependency Maintenance', desc: 'Continuous updates for external API changes, security patches, and cloud dependencies.' },
+        { name: 'Cloud Infrastructure & Backups', desc: 'Proactive server health monitoring, automated backups, and uptime care.' },
       ],
     },
   ];
@@ -251,11 +253,11 @@ export const ServicesOverview: React.FC = () => {
           {loopSlides.map((cat, idx) => (
             <div
               key={`${cat.id}-${idx}`}
-              className="w-[440px] sm:w-[540px] lg:w-[600px] shrink-0 p-7 sm:p-9 rounded-3xl bg-[#FAF8F5] dark:bg-[#14161B] border border-ethix-charcoal-200/80 dark:border-white/10 shadow-premium hover:shadow-elevated transition-all duration-300 hover:border-ethix-charcoal-400 dark:hover:border-white/30 flex flex-col justify-between group"
+              className="w-[310px] xs:w-[350px] sm:w-[480px] lg:w-[540px] shrink-0 p-5 sm:p-7 lg:p-8 rounded-3xl bg-[#FAF8F5] dark:bg-[#14161B] border border-ethix-charcoal-200/80 dark:border-white/10 shadow-premium hover:shadow-elevated transition-all duration-300 hover:border-ethix-charcoal-400 dark:hover:border-white/30 flex flex-col justify-between group"
             >
-              {/* Card Header */}
+              {/* Card Header & Content */}
               <div>
-                <div className="flex items-center justify-between gap-3 mb-5">
+                <div className="flex items-center justify-between gap-3 mb-4 sm:mb-5">
                   <div
                     className={`inline-flex items-center gap-2 px-3 py-1 rounded-md text-xs font-mono font-semibold border ${cat.accentBg} ${cat.accentColor} ${cat.accentBorder}`}
                   >
@@ -269,52 +271,45 @@ export const ServicesOverview: React.FC = () => {
                 </div>
 
                 {/* Tagline & Description */}
-                <h3 className="text-xl sm:text-2xl font-extrabold text-[#0F1012] dark:text-[#F4F4F6] leading-snug mb-3 group-hover:text-ethix-red dark:group-hover:text-ethix-red transition-colors">
+                <h3 className="text-lg sm:text-xl font-extrabold text-[#0F1012] dark:text-[#F4F4F6] leading-snug mb-2 sm:mb-3 group-hover:text-ethix-red dark:group-hover:text-ethix-red transition-colors">
                   {cat.tagline}
                 </h3>
-                <p className="text-xs sm:text-sm text-ethix-charcoal-600 dark:text-ethix-charcoal-300 leading-relaxed mb-6">
+                <p className="text-xs sm:text-sm text-ethix-charcoal-600 dark:text-ethix-charcoal-300 leading-relaxed mb-4 sm:mb-5 line-clamp-3">
                   {cat.description}
                 </p>
 
                 {/* Deliverables Grid for this Discipline */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 mb-4 sm:mb-5">
                   {cat.services.slice(0, 4).map((svc, sIdx) => (
                     <div
                       key={sIdx}
-                      className="p-3.5 rounded-xl bg-white dark:bg-[#101114] border border-ethix-charcoal-200/70 dark:border-white/10 transition-colors hover:border-ethix-red/40"
+                      className="p-3 sm:p-3.5 rounded-xl bg-white dark:bg-[#101114] border border-ethix-charcoal-200/70 dark:border-white/10 transition-colors hover:border-ethix-red/40 flex flex-col justify-between"
                     >
-                      <div className="flex items-center gap-1.5 mb-1">
-                        <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-                        <h4 className="font-bold text-xs text-[#0F1012] dark:text-[#F4F4F6] truncate">
-                          {svc.name}
-                        </h4>
+                      <div>
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+                          <h4 className="font-bold text-xs text-[#0F1012] dark:text-[#F4F4F6] truncate">
+                            {svc.name}
+                          </h4>
+                        </div>
+                        <p className="text-[11px] text-ethix-charcoal-600 dark:text-ethix-charcoal-400 line-clamp-2 leading-relaxed">
+                          {svc.desc}
+                        </p>
                       </div>
-                      <p className="text-[11px] text-ethix-charcoal-600 dark:text-ethix-charcoal-400 line-clamp-2 leading-relaxed">
-                        {svc.desc}
-                      </p>
                       <div className="pt-2 text-[10px] font-semibold text-ethix-red">
                         Ready for Deployment →
                       </div>
                     </div>
                   ))}
                 </div>
-
-                {/* If the category has more than 4 services (like Growth) */}
-                {cat.services.length > 4 && (
-                  <div className="mb-6 -mt-1 text-center">
-                    <span className="text-[11px] font-semibold text-ethix-charcoal-500 dark:text-ethix-charcoal-400">
-                      + {cat.services.length - 4} additional specialized deliverables included
-                    </span>
-                  </div>
-                )}
               </div>
 
               {/* Card Footer: Action Links */}
-              <div className="pt-5 border-t border-ethix-charcoal-200/60 dark:border-white/10 flex items-center justify-between gap-3">
+              <div className="pt-4 border-t border-ethix-charcoal-200/60 dark:border-white/10 flex items-center justify-between gap-3 mt-auto">
                 <button
                   type="button"
                   onClick={() => setSelectedDiscipline(cat)}
-                  className="inline-flex items-center gap-1.5 bg-ethix-red hover:bg-ethix-red-hover text-white px-4 py-2.5 rounded-xl font-bold text-xs tracking-wide shadow-subtle transition-all duration-150 group/btn"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-1.5 bg-ethix-red hover:bg-ethix-red-hover text-white px-4 py-2.5 rounded-xl font-bold text-xs tracking-wide shadow-subtle transition-all duration-150 group/btn"
                 >
                   <span>Detailed Deliverables & Scope</span>
                   <ArrowUpRight className="w-3.5 h-3.5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />

@@ -64,7 +64,7 @@ export const DigitalSculpture: React.FC<DigitalSculptureProps> = ({ className = 
       const height = container.clientHeight || 500;
 
       camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-      camera.position.set(0, 0, 8.4);
+      camera.position.set(0, 0, width < 640 ? 9.6 : 8.4);
 
       // 2. WebGL Renderer with transparency & high-performance settings
       renderer = new THREE.WebGLRenderer({
@@ -76,6 +76,7 @@ export const DigitalSculpture: React.FC<DigitalSculptureProps> = ({ className = 
       renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
       renderer.toneMappingExposure = theme === 'dark' ? 1.2 : 1.05;
+      renderer.domElement.style.touchAction = 'pan-y';
       container.appendChild(renderer.domElement);
 
       // 3. Lighting System tailored for light & dark themes
@@ -308,6 +309,7 @@ export const DigitalSculpture: React.FC<DigitalSculptureProps> = ({ className = 
         const h = container.clientHeight;
         if (w === 0 || h === 0) return;
         camera.aspect = w / h;
+        camera.position.z = w < 640 ? 9.6 : 8.4;
         camera.updateProjectionMatrix();
         renderer.setSize(w, h);
       };
@@ -429,52 +431,55 @@ export const DigitalSculpture: React.FC<DigitalSculptureProps> = ({ className = 
       onPointerMove={handlePointerMove}
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
-      className={`relative w-full h-[380px] sm:h-[440px] md:h-[480px] lg:h-[520px] flex items-center justify-center select-none overflow-visible ${className}`}
+      onPointerUp={handlePointerLeave}
+      onPointerCancel={handlePointerLeave}
+      style={{ touchAction: 'pan-y' }}
+      className={`relative w-full h-[350px] xs:h-[390px] sm:h-[440px] md:h-[480px] lg:h-[520px] flex items-center justify-center select-none overflow-visible touch-pan-y ${className}`}
     >
       {/* Fallback Graphic (Renders immediately or if WebGL is unavailable) */}
       {(!isLoaded || hasWebGLError) && (
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-700">
-          <SculptureFallback />
+          <SculptureFallback showBadges={false} />
         </div>
       )}
 
-      {/* Discrete Architectural Service Annotations (Placed safely around sculpture without cluttering text) */}
-      <div className="absolute top-2 left-0 sm:-left-3 z-20 pointer-events-none hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 dark:bg-[#14161C]/90 backdrop-blur-md border border-ethix-charcoal-200/80 dark:border-white/10 shadow-subtle animate-float-node-1">
-        <Globe className="w-3.5 h-3.5 text-ethix-red" />
-        <span className="text-[11px] font-bold text-[#0F1012] dark:text-[#F4F4F6]">
+      {/* Discrete Architectural Service Annotations (Staggered vertically on mobile to eliminate any overlap) */}
+      <div className="absolute top-1 sm:top-2 left-1 sm:-left-3 z-20 pointer-events-none flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-white/95 dark:bg-[#14161C]/95 backdrop-blur-md border border-ethix-charcoal-200/80 dark:border-white/10 shadow-subtle animate-float-node-1 max-w-[170px] xs:max-w-none">
+        <Globe className="w-3.5 h-3.5 text-ethix-red shrink-0" />
+        <span className="text-[10px] sm:text-[11px] font-bold text-[#0F1012] dark:text-[#F4F4F6] truncate">
           Website Architecture
         </span>
-        <span className="text-[9px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
+        <span className="hidden xs:inline-block text-[8px] sm:text-[9px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-500/10 px-1.5 py-0.5 rounded shrink-0">
           98 Score
         </span>
       </div>
 
-      <div className="absolute top-4 right-0 sm:-right-3 z-20 pointer-events-none hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 dark:bg-[#14161C]/90 backdrop-blur-md border border-ethix-charcoal-200/80 dark:border-white/10 shadow-subtle animate-float-node-2">
-        <Bot className="w-3.5 h-3.5 text-ethix-brass" />
-        <span className="text-[11px] font-bold text-[#0F1012] dark:text-[#F4F4F6]">
+      <div className="absolute top-12 sm:top-4 right-1 sm:-right-3 z-20 pointer-events-none flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-white/95 dark:bg-[#14161C]/95 backdrop-blur-md border border-ethix-charcoal-200/80 dark:border-white/10 shadow-subtle animate-float-node-2 max-w-[170px] xs:max-w-none">
+        <Bot className="w-3.5 h-3.5 text-ethix-brass shrink-0" />
+        <span className="text-[10px] sm:text-[11px] font-bold text-[#0F1012] dark:text-[#F4F4F6] truncate">
           AI Booking Agents
         </span>
-        <span className="text-[9px] font-mono text-ethix-brass font-semibold">
+        <span className="hidden xs:inline-block text-[8px] sm:text-[9px] font-mono text-ethix-brass font-semibold bg-ethix-brass/10 px-1.5 py-0.5 rounded shrink-0">
           24/7 Active
         </span>
       </div>
 
-      <div className="absolute bottom-4 left-2 sm:left-4 z-20 pointer-events-none hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 dark:bg-[#14161C]/90 backdrop-blur-md border border-ethix-charcoal-200/80 dark:border-white/10 shadow-subtle animate-float-node-3">
-        <GitBranch className="w-3.5 h-3.5 text-emerald-500" />
-        <span className="text-[11px] font-bold text-[#0F1012] dark:text-[#F4F4F6]">
+      <div className="absolute bottom-12 sm:bottom-4 left-1 sm:left-4 z-20 pointer-events-none flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-white/95 dark:bg-[#14161C]/95 backdrop-blur-md border border-ethix-charcoal-200/80 dark:border-white/10 shadow-subtle animate-float-node-3 max-w-[170px] xs:max-w-none">
+        <GitBranch className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+        <span className="text-[10px] sm:text-[11px] font-bold text-[#0F1012] dark:text-[#F4F4F6] truncate">
           CRM Pipelines
         </span>
-        <span className="text-[9px] font-mono text-ethix-charcoal-500 dark:text-ethix-charcoal-400">
+        <span className="hidden xs:inline-block text-[8px] sm:text-[9px] font-mono text-ethix-charcoal-500 dark:text-ethix-charcoal-400 bg-black/5 dark:bg-white/5 px-1.5 py-0.5 rounded shrink-0">
           Zero Leakage
         </span>
       </div>
 
-      <div className="absolute bottom-6 right-2 sm:right-4 z-20 pointer-events-none hidden md:flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/90 dark:bg-[#14161C]/90 backdrop-blur-md border border-ethix-charcoal-200/80 dark:border-white/10 shadow-subtle animate-float-node-4">
-        <LineChart className="w-3.5 h-3.5 text-blue-500" />
-        <span className="text-[11px] font-bold text-[#0F1012] dark:text-[#F4F4F6]">
+      <div className="absolute bottom-1 sm:bottom-6 right-1 sm:right-4 z-20 pointer-events-none flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-3 sm:py-1.5 rounded-full bg-white/95 dark:bg-[#14161C]/95 backdrop-blur-md border border-ethix-charcoal-200/80 dark:border-white/10 shadow-subtle animate-float-node-4 max-w-[170px] xs:max-w-none">
+        <LineChart className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+        <span className="text-[10px] sm:text-[11px] font-bold text-[#0F1012] dark:text-[#F4F4F6] truncate">
           Live Telemetry
         </span>
-        <span className="text-[9px] font-mono text-ethix-charcoal-500 dark:text-ethix-charcoal-400">
+        <span className="hidden xs:inline-block text-[8px] sm:text-[9px] font-mono text-ethix-charcoal-500 dark:text-ethix-charcoal-400 bg-black/5 dark:bg-white/5 px-1.5 py-0.5 rounded shrink-0">
           Real-Time
         </span>
       </div>

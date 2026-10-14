@@ -127,7 +127,7 @@ export const FeaturedWork: React.FC = () => {
           {caseStudies.map((cs) => (
             <div
               key={cs.id}
-              className="p-8 sm:p-10 rounded-3xl bg-white dark:bg-[#101114] border border-ethix-charcoal-200/80 dark:border-white/10 shadow-subtle hover:shadow-premium transition-all duration-300 flex flex-col justify-between"
+              className="p-5 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl bg-white dark:bg-[#101114] border border-ethix-charcoal-200/80 dark:border-white/10 shadow-subtle hover:shadow-premium transition-all duration-300 flex flex-col justify-between"
             >
               <div className="space-y-5">
                 <div className="flex items-center justify-between">

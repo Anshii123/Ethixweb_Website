@@ -187,8 +187,14 @@ export const Navbar: React.FC = () => {
 
         {/* Mobile Navigation Drawer */}
         {isOpen && (
-          <div className="lg:hidden fixed inset-x-0 top-[65px] bottom-0 bg-black/40 backdrop-blur-sm z-50 animate-fade-in">
-            <div className="bg-[#FAF8F5] dark:bg-[#121316] border-b border-ethix-charcoal-200 dark:border-white/10 p-5 shadow-elevated max-h-[calc(100vh-65px)] overflow-y-auto">
+          <div
+            onClick={() => setIsOpen(false)}
+            className="lg:hidden fixed inset-x-0 top-[60px] sm:top-[68px] bottom-0 bg-black/50 backdrop-blur-sm z-50 animate-fade-in"
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#FAF8F5] dark:bg-[#121316] border-b border-ethix-charcoal-200 dark:border-white/10 p-5 shadow-elevated max-h-[calc(100vh-68px)] overflow-y-auto"
+            >
               <nav aria-label="Mobile Navigation" className="flex flex-col gap-1">
                 {navLinks.map((link) => {
                   const active = isActive(link.href);
@@ -196,6 +202,7 @@ export const Navbar: React.FC = () => {
                     <Link
                       key={link.name}
                       to={link.href}
+                      onClick={() => setIsOpen(false)}
                       className={`px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                         active
                           ? 'bg-ethix-red/10 text-ethix-red font-bold dark:bg-ethix-red/20'
@@ -215,6 +222,7 @@ export const Navbar: React.FC = () => {
 
                   <Link
                     to="/contact"
+                    onClick={() => setIsOpen(false)}
                     className="w-full text-center py-3.5 rounded-xl bg-ethix-red text-white font-bold text-sm shadow-subtle flex items-center justify-center gap-1.5 active:scale-[0.98]"
                   >
                     <span>Start a Project</span>

@@ -86,15 +86,15 @@ export const WhyEthixweb: React.FC = () => {
 
         {/* Comparison Matrix */}
         <div className="mb-20 rounded-3xl overflow-hidden border border-ethix-charcoal-200/80 dark:border-white/10 bg-white dark:bg-[#101114] shadow-premium">
-          <div className="grid grid-cols-1 md:grid-cols-12 border-b border-ethix-charcoal-200/70 dark:border-white/10 bg-ethix-ivory-50 dark:bg-white/5 p-4 sm:p-6 text-xs sm:text-sm font-bold">
-            <div className="md:col-span-4 text-ethix-charcoal-500 dark:text-ethix-charcoal-400 uppercase tracking-wider">
+          <div className="hidden md:grid grid-cols-12 border-b border-ethix-charcoal-200/70 dark:border-white/10 bg-ethix-ivory-50 dark:bg-white/5 p-4 sm:p-6 text-xs sm:text-sm font-bold">
+            <div className="col-span-4 text-ethix-charcoal-500 dark:text-ethix-charcoal-400 uppercase tracking-wider">
               Capability & Philosophy
             </div>
-            <div className="md:col-span-4 text-ethix-red font-extrabold flex items-center gap-1.5 mt-2 md:mt-0">
+            <div className="col-span-4 text-ethix-red font-extrabold flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-ethix-red" />
               <span>Ethixweb Digital Operations</span>
             </div>
-            <div className="md:col-span-4 text-ethix-charcoal-600 dark:text-ethix-charcoal-400 mt-2 md:mt-0">
+            <div className="col-span-4 text-ethix-charcoal-600 dark:text-ethix-charcoal-400">
               Typical Creative Agency Factory
             </div>
           </div>
@@ -103,22 +103,32 @@ export const WhyEthixweb: React.FC = () => {
             {comparisonItems.map((item, i) => (
               <div
                 key={i}
-                className="grid grid-cols-1 md:grid-cols-12 p-5 sm:p-6 gap-3 sm:gap-4 items-center text-xs sm:text-sm hover:bg-ethix-ivory-50/50 dark:hover:bg-white/[0.02] transition-colors"
+                className="grid grid-cols-1 md:grid-cols-12 p-4 sm:p-6 gap-3 sm:gap-4 items-start md:items-center text-xs sm:text-sm hover:bg-ethix-ivory-50/50 dark:hover:bg-white/[0.02] transition-colors"
               >
-                <div className="md:col-span-4 font-bold text-[#0F1012] dark:text-[#F4F4F6]">
+                <div className="md:col-span-4 font-bold text-sm sm:text-base text-[#0F1012] dark:text-[#F4F4F6]">
                   {item.feature}
                 </div>
                 <div className="md:col-span-4 flex items-start gap-2.5 text-ethix-charcoal-800 dark:text-ethix-charcoal-200 font-medium">
                   <div className="p-1 rounded-full bg-emerald-100 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 shrink-0 mt-0.5">
                     <Check className="w-3.5 h-3.5" />
                   </div>
-                  <span>{item.ethixweb}</span>
+                  <div className="space-y-0.5">
+                    <span className="md:hidden text-[10px] font-mono font-bold uppercase tracking-wider text-ethix-red block">
+                      Ethixweb:
+                    </span>
+                    <span>{item.ethixweb}</span>
+                  </div>
                 </div>
                 <div className="md:col-span-4 flex items-start gap-2.5 text-ethix-charcoal-500 dark:text-ethix-charcoal-400">
                   <div className="p-1 rounded-full bg-red-100 dark:bg-red-950/50 text-red-500 dark:text-red-400 shrink-0 mt-0.5">
                     <X className="w-3.5 h-3.5" />
                   </div>
-                  <span>{item.typicalAgency}</span>
+                  <div className="space-y-0.5">
+                    <span className="md:hidden text-[10px] font-mono font-bold uppercase tracking-wider text-ethix-charcoal-400 block">
+                      Typical Agency:
+                    </span>
+                    <span>{item.typicalAgency}</span>
+                  </div>
                 </div>
               </div>
             ))}
