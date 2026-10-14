@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Clock, ShieldCheck, Zap, Laptop, ArrowUpRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { InteractiveGlobe } from './InteractiveGlobe';
+
+const InteractiveGlobe = React.lazy(() =>
+  import('./InteractiveGlobe').then((m) => ({ default: m.InteractiveGlobe }))
+);
 
 interface HubTime {
   id: string;
@@ -11,6 +14,9 @@ interface HubTime {
 }
 
 export const GlobalNetwork: React.FC = () => {
+  const globeContainerRef = React.useRef<HTMLDivElement>(null);
+  const [shouldRenderGlobe, setShouldRenderGlobe] = useState(false);
+
   // Live continuous real-time clocks for all global hubs
   const [hubTimes, setHubTimes] = useState<{ [key: string]: string }>({
     india: '',
@@ -20,6 +26,21 @@ export const GlobalNetwork: React.FC = () => {
     canada: '',
     uk: '',
   });
+
+  useEffect(() => {
+    if (!globeContainerRef.current) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldRenderGlobe(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '250px' }
+    );
+    observer.observe(globeContainerRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     const updateClocks = () => {
@@ -174,7 +195,27 @@ export const GlobalNetwork: React.FC = () => {
         </div>
 
         {/* Interactive 3D Dotted Globe with Drag to Rotate & 4-Metric Strip */}
-        <InteractiveGlobe />
+        <div ref={globeContainerRef}>
+          {shouldRenderGlobe ? (
+            <React.Suspense
+              fallback={
+                <div className="w-full h-[340px] sm:h-[400px] md:h-[460px] lg:h-[500px] rounded-3xl bg-[#0F1012] border border-ethix-charcoal-800/80 flex items-center justify-center">
+                  <span className="text-xs font-mono text-ethix-charcoal-500">
+                    Loading Global Telemetry...
+                  </span>
+                </div>
+              }
+            >
+              <InteractiveGlobe />
+            </React.Suspense>
+          ) : (
+            <div className="w-full h-[340px] sm:h-[400px] md:h-[460px] lg:h-[500px] rounded-3xl bg-[#0F1012] border border-ethix-charcoal-800/80 flex items-center justify-center">
+              <span className="text-xs font-mono text-ethix-charcoal-500">
+                Interactive Global Operations Telemetry
+              </span>
+            </div>
+          )}
+        </div>
 
         {/* Live Network Grid Cards with Real-Time Seconds */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-14">

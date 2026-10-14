@@ -111,12 +111,12 @@ async function runRealtimeVerification() {
     }),
   });
   const patchJson = await patchRes.json();
-  assert(patchRes.status === 200, 'Lead successfully updated via PATCH');
+  assert(patchRes.status === 200 && patchJson.success, 'Lead successfully updated via PATCH');
 
   const updatedAtlasDoc = await Lead.findById(createdId);
   assert(updatedAtlasDoc?.status === 'contacted', 'Updated status reflected immediately in Atlas');
   assert(
-    updatedAtlasDoc?.notes?.some((n: any) => n.text.includes('Technical discovery call')),
+    Boolean(updatedAtlasDoc?.notes?.some((n: any) => n.text.includes('Technical discovery call'))),
     'Internal note appended to lead in Atlas'
   );
 

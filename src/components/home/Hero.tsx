@@ -1,20 +1,46 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, CheckCircle2, Clock, Zap } from 'lucide-react';
-import { DigitalSculpture } from './DigitalSculpture';
+import { SculptureFallback } from './SculptureFallback';
+
+const DigitalSculpture = lazy(() =>
+  import('./DigitalSculpture').then((m) => ({ default: m.DigitalSculpture }))
+);
 
 export const Hero: React.FC = () => {
   // Magnetic CTA state
   const [magneticOffset, setMagneticOffset] = useState({ x: 0, y: 0 });
   const [isFinePointer, setIsFinePointer] = useState(false);
+  const [mountSculpture, setMountSculpture] = useState(false);
 
-  // Detect fine pointer devices (desktop mouse)
+  // Defer heavy WebGL initialization slightly past initial DOM paint
   useEffect(() => {
+    const timer = setTimeout(() => {
+      setMountSculpture(true);
+    }, 60);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Detect fine pointer devices (desktop mouse) and screen width
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const checkDesktop = () => {
+      const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      const wideScreen = window.innerWidth >= 768;
+      setIsFinePointer(finePointer);
+      setIsDesktop(finePointer && wideScreen);
+    };
+    checkDesktop();
+
     const mediaQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
-    setIsFinePointer(mediaQuery.matches);
-    const handler = (e: MediaQueryListEvent) => setIsFinePointer(e.matches);
+    const handler = () => checkDesktop();
     mediaQuery.addEventListener('change', handler);
-    return () => mediaQuery.removeEventListener('change', handler);
+    window.addEventListener('resize', checkDesktop);
+    return () => {
+      mediaQuery.removeEventListener('change', handler);
+      window.removeEventListener('resize', checkDesktop);
+    };
   }, []);
 
   // Magnetic CTA Handler
@@ -119,8 +145,22 @@ export const Hero: React.FC = () => {
               {/* Soft ambient radial backdrop to highlight the 3D sculpture depth */}
               <div className="absolute inset-0 bg-radial-gradient from-ethix-red/10 via-transparent to-transparent rounded-full blur-2xl pointer-events-none" />
 
-              {/* The Interactive 3D WebGL Digital Sculpture */}
-              <DigitalSculpture />
+              {/* The Interactive 3D WebGL Digital Sculpture with zero-CLS Suspense fallback */}
+              {mountSculpture && isDesktop ? (
+                <Suspense
+                  fallback={
+                    <div className="relative w-full h-[380px] sm:h-[440px] md:h-[480px] lg:h-[520px] flex items-center justify-center select-none">
+                      <SculptureFallback />
+                    </div>
+                  }
+                >
+                  <DigitalSculpture />
+                </Suspense>
+              ) : (
+                <div className="relative w-full h-[380px] sm:h-[440px] md:h-[480px] lg:h-[520px] flex items-center justify-center select-none">
+                  <SculptureFallback />
+                </div>
+              )}
             </div>
           </div>
         </div>

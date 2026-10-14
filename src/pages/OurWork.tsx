@@ -110,7 +110,7 @@ export const OurWork: React.FC = () => {
       title: 'Architectural Millwork Portfolio & High-Ticket Inquiries',
       industry: 'Architectural Millwork & Cabinetry',
       icon: <Hammer className="w-5 h-5 text-emerald-500" />,
-      image: '/images/hero-operations.jpg',
+      image: '/images/hero-operations.webp',
       year: '2025',
       problem:
         'World-class bespoke craftsmanship was represented by a low-resolution website that caused high bounce rates among interior architects and luxury builders.',

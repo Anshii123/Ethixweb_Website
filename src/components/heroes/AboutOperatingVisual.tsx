@@ -9,8 +9,12 @@ export const AboutOperatingVisual: React.FC = () => {
         {/* Real Engineering Studio Imagery */}
         <div className="relative h-[280px] sm:h-[320px] overflow-hidden">
           <img
-            src="/images/studio-team.jpg"
+            src="/images/studio-team.webp"
             alt="Ethixweb senior technical architects collaborating on digital operations"
+            width={500}
+            height={320}
+            loading="lazy"
+            decoding="async"
             className="w-full h-full object-cover object-center filter brightness-[0.88] contrast-[1.05] hover:scale-105 transition-transform duration-700"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0F1012] via-[#0F1012]/30 to-transparent" />

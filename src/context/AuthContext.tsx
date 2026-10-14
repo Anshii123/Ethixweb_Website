@@ -33,7 +33,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   useEffect(() => {
-    checkSession();
+    // Avoid unnecessary blocking API call on public routes for regular visitors
+    const hasToken = typeof window !== 'undefined' && sessionStorage.getItem('ethix_admin_jwt');
+    const isAdminRoute = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin');
+    if (hasToken || isAdminRoute) {
+      checkSession();
+    } else {
+      setIsLoading(false);
+    }
   }, [checkSession]);
 
   const login = async (credentials: LoginFormData) => {
