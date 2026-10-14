@@ -116,9 +116,9 @@ export const TestimonialsSection: React.FC = () => {
 
               <div className="pt-6 border-t border-ethix-charcoal-200/70 dark:border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <h4 className="font-bold text-base text-[#0F1012] dark:text-[#F4F4F6]">
+                  <h3 className="font-bold text-base text-[#0F1012] dark:text-[#F4F4F6]">
                     {t.author}
-                  </h4>
+                  </h3>
                   <p className="text-xs text-ethix-charcoal-500 dark:text-ethix-charcoal-400">
                     {t.role}, <span className="font-semibold text-ethix-charcoal-700 dark:text-ethix-charcoal-300">{t.company}</span>
                   </p>

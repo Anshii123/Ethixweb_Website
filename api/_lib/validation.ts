@@ -35,9 +35,19 @@ export const CreateLeadSchema = z.object({
   phone: z
     .string()
     .trim()
-    .max(25, { message: 'Phone number cannot exceed 25 characters.' })
-    .optional()
-    .or(z.literal('')),
+    .min(1, { message: 'Phone number is required.' })
+    .refine((val) => /^\d+$/.test(val), {
+      message: 'Phone number must contain digits only.',
+    })
+    .refine((val) => !val.startsWith('0'), {
+      message: 'Phone number cannot start with 0.',
+    })
+    .refine((val) => val.length >= 10, {
+      message: 'Phone number must be of 10 digits only (not less than 10 digits).',
+    })
+    .refine((val) => val.length <= 10, {
+      message: 'Phone number must be of 10 digits only (not more than 10 digits).',
+    }),
   company: z
     .string()
     .trim()

@@ -1,8 +1,5 @@
 import { z } from 'zod';
 
-// Allows flexible international phone format (including +91, 10-digit Indian numbers, and global E.164 formats)
-const phoneRegex = /^[+]?[(]?[0-9]{1,4}[)]?[-\s./0-9]{6,16}$/;
-
 export const ContactFormSchema = z.object({
   name: z
     .string()
@@ -17,12 +14,19 @@ export const ContactFormSchema = z.object({
   phone: z
     .string()
     .trim()
-    .refine(
-      (val) => !val || phoneRegex.test(val.replace(/[\s-]/g, '')),
-      'Please enter a valid phone number (e.g. +91 98765 43210 or +1 206 555 0192).'
-    )
-    .optional()
-    .or(z.literal('')),
+    .min(1, 'Phone number is required.')
+    .refine((val) => /^\d+$/.test(val), {
+      message: 'Phone number must contain digits only.',
+    })
+    .refine((val) => !val.startsWith('0'), {
+      message: 'Phone number cannot start with 0.',
+    })
+    .refine((val) => val.length >= 10, {
+      message: 'Phone number must be of 10 digits only (not less than 10 digits).',
+    })
+    .refine((val) => val.length <= 10, {
+      message: 'Phone number must be of 10 digits only (not more than 10 digits).',
+    }),
   company: z
     .string()
     .trim()

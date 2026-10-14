@@ -58,6 +58,35 @@ export const Contact: React.FC = () => {
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
+
+    if (name === 'phone') {
+      // Enforce digits only and restrict to maximum 10 digits
+      const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+      setFormData((prev) => ({ ...prev, phone: digitsOnly }));
+
+      // Immediate feedback for number validation rules
+      if (digitsOnly.length > 0 && digitsOnly.startsWith('0')) {
+        setErrors((prev) => ({
+          ...prev,
+          phone: 'Phone number cannot start with 0.',
+        }));
+      } else if (digitsOnly.length > 0 && digitsOnly.length < 10) {
+        setErrors((prev) => ({
+          ...prev,
+          phone: `Phone number must be of 10 digits only (${digitsOnly.length}/10 entered).`,
+        }));
+      } else {
+        setErrors((prev) => {
+          const next = { ...prev };
+          delete next.phone;
+          return next;
+        });
+      }
+      setServerError(null);
+      setRateLimitNotice(null);
+      return;
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
     if (errors[name]) {
       setErrors((prev) => {
@@ -289,8 +318,11 @@ export const Contact: React.FC = () => {
                         label="Phone Number"
                         name="phone"
                         type="tel"
-                        placeholder="+1 (206) 555-0192 or +91 98765 43210"
-                        helperText="Supports US, Indian (+91), and international numbers"
+                        inputMode="numeric"
+                        maxLength={10}
+                        required
+                        placeholder="e.g. 9876543210"
+                        helperText="Must be exactly 10 digits and cannot start with 0"
                         value={formData.phone || ''}
                         onChange={handleChange}
                         error={errors.phone}

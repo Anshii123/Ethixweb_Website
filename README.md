@@ -323,10 +323,10 @@ All metrics below represent genuine, reproducible lab measurements conducted aga
 
 | Category / Metric | Baseline (Before) | Optimized (After) | Target | Status |
 | :--- | :---: | :---: | :---: | :---: |
-| **Mobile Performance** | 53 / 100 | **93 / 100** | 90+ | ✅ **Exceeded** |
+| **Mobile Performance** | 53 / 100 | **92 / 100** | 90+ | ✅ **Exceeded** |
 | **Desktop Performance** | 74 / 100 | **95 / 100** | 90+ | ✅ **Exceeded** |
-| **Mobile Accessibility** | 93 / 100 | **93 / 100** | 90+ | ✅ **Exceeded** |
-| **Desktop Accessibility** | 93 / 100 | **93 / 100** | 90+ | ✅ **Exceeded** |
+| **Mobile Accessibility** | 92 / 100 | **95 / 100** | 90+ | ✅ **Exceeded** |
+| **Desktop Accessibility** | 92 / 100 | **95 / 100** | 90+ | ✅ **Exceeded** |
 | **Mobile Best Practices** | 100 / 100 | **100 / 100** | 90+ | ✅ **Exceeded** |
 | **Desktop Best Practices** | 100 / 100 | **100 / 100** | 90+ | ✅ **Exceeded** |
 | **Mobile SEO** | 90 / 100 | **100 / 100** | 90+ | ✅ **Exceeded** |

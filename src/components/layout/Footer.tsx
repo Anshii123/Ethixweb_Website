@@ -43,9 +43,9 @@ export const Footer: React.FC = () => {
 
           {/* Core Services */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-4">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-4">
               Core Disciplines
-            </h4>
+            </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
                 <Link to="/services" className="hover:text-white transition-colors">
@@ -82,9 +82,9 @@ export const Footer: React.FC = () => {
 
           {/* Navigation */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-4">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-4">
               Company & Work
-            </h4>
+            </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
                 <Link to="/" className="hover:text-white transition-colors">
@@ -121,9 +121,9 @@ export const Footer: React.FC = () => {
 
           {/* Verified Contact Details */}
           <div>
-            <h4 className="text-xs font-bold uppercase tracking-widest text-white mb-4">
+            <h3 className="text-xs font-bold uppercase tracking-widest text-white mb-4">
               Direct Contact
-            </h4>
+            </h3>
             <ul className="space-y-3 text-sm">
               <li>
                 <a

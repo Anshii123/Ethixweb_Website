@@ -29,7 +29,7 @@ async function runTestSuite() {
   const validLead = {
     name: 'Rohan Sharma',
     email: 'rohan.sharma@example.in',
-    phone: '+91 98765 43210',
+    phone: '9876543210',
     company: 'Sharma Retail Tech',
     service: 'website-design',
     budget: '1.5L-3.5L',
@@ -40,6 +40,37 @@ async function runTestSuite() {
 
   const validResult = CreateLeadSchema.safeParse(validLead);
   assert(validResult.success, 'Valid lead payload passes Zod schema');
+
+  // Phone check 1: Valid 10-digit number starting with 1-9 passes
+  const validPhoneResult1 = CreateLeadSchema.safeParse({ ...validLead, phone: '9876543210' });
+  assert(validPhoneResult1.success, 'Accepts valid 10-digit phone number starting with 9');
+
+  const validPhoneResult2 = CreateLeadSchema.safeParse({ ...validLead, phone: '1234567890' });
+  assert(validPhoneResult2.success, 'Accepts valid 10-digit phone number starting with 1');
+
+  // Phone check 2: Rejects number starting with 0
+  const zeroStartResult = CreateLeadSchema.safeParse({ ...validLead, phone: '0987654321' });
+  assert(!zeroStartResult.success, 'Rejects phone number starting with 0');
+  if (!zeroStartResult.success) {
+    const msg = zeroStartResult.error.issues[0]?.message;
+    assert(msg === 'Phone number cannot start with 0.', 'Returns specific error: Phone number cannot start with 0');
+  }
+
+  // Phone check 3: Rejects number with less than 10 digits
+  const shortPhoneResult = CreateLeadSchema.safeParse({ ...validLead, phone: '987654321' });
+  assert(!shortPhoneResult.success, 'Rejects phone number with less than 10 digits (9 digits)');
+
+  // Phone check 4: Rejects number with more than 10 digits
+  const longPhoneResult = CreateLeadSchema.safeParse({ ...validLead, phone: '98765432101' });
+  assert(!longPhoneResult.success, 'Rejects phone number with more than 10 digits (11 digits)');
+
+  // Phone check 5: Rejects non-numeric characters
+  const nonDigitResult = CreateLeadSchema.safeParse({ ...validLead, phone: '98765abcd0' });
+  assert(!nonDigitResult.success, 'Rejects phone number containing non-numeric characters');
+
+  // Phone check 6: Rejects empty phone number
+  const emptyPhoneResult = CreateLeadSchema.safeParse({ ...validLead, phone: '' });
+  assert(!emptyPhoneResult.success, 'Rejects empty phone number');
 
   // Missing required name
   const invalidNameResult = CreateLeadSchema.safeParse({ ...validLead, name: '' });

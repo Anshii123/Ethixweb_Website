@@ -60,7 +60,7 @@ async function runRealtimeVerification() {
   const newLeadPayload = {
     name: 'Kabir Sengupta',
     email: testEmail,
-    phone: '+91 99001 22334',
+    phone: '9900122334',
     company: 'Sengupta Operations Hub',
     service: 'ai-automation',
     budget: '3.5L-8L',
