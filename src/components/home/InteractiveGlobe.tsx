@@ -118,7 +118,7 @@ export const InteractiveGlobe: React.FC = () => {
 
       const centerX = width / 2;
       const centerY = height / 2;
-      const globeRadius = Math.min(width, height) * 0.42;
+      const globeRadius = Math.min(width, height) * (width < 640 ? 0.38 : 0.42);
 
       const cosY = Math.cos(rotation.current.y);
       const sinY = Math.sin(rotation.current.y);
@@ -290,10 +290,26 @@ export const InteractiveGlobe: React.FC = () => {
   const currentActivity = LIVE_ACTIVITIES[activeActivityIndex];
 
   return (
-    <div className="relative w-full max-w-4xl mx-auto my-12 flex flex-col items-center">
+    <div className="relative w-full max-w-4xl mx-auto my-8 sm:my-12 flex flex-col items-center">
+      {/* Live Network Activity: On mobile, neatly positioned above the globe to never cover the sphere */}
+      <div className="sm:hidden mb-3 w-full max-w-xs px-3.5 py-2.5 rounded-2xl bg-white/95 dark:bg-[#14161B]/95 backdrop-blur-md border border-ethix-charcoal-200/80 dark:border-white/10 shadow-subtle space-y-1">
+        <div className="flex items-center gap-1.5 text-[9px] font-mono uppercase tracking-wider text-ethix-charcoal-500 dark:text-ethix-charcoal-400">
+          <span className="w-1.5 h-1.5 rounded-full bg-ethix-red animate-ping" />
+          <span>LIVE NETWORK ACTIVITY</span>
+        </div>
+        <div className="flex items-center justify-between gap-3 text-xs">
+          <span className="font-bold text-[#0F1012] dark:text-[#F4F4F6] truncate">
+            {currentActivity.action}
+          </span>
+          <span className="font-mono font-semibold text-ethix-red text-[11px] shrink-0">
+            {currentActivity.location}
+          </span>
+        </div>
+      </div>
+
       {/* 3D Canvas Box */}
       <div
-        className="relative w-full h-[360px] sm:h-[460px] md:h-[500px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
+        className="relative w-full h-[320px] xs:h-[350px] sm:h-[460px] md:h-[500px] flex items-center justify-center cursor-grab active:cursor-grabbing select-none"
         onPointerDown={handlePointerDown}
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
@@ -301,8 +317,8 @@ export const InteractiveGlobe: React.FC = () => {
       >
         <canvas ref={canvasRef} className="w-full h-full" />
 
-        {/* Live Network Activity Floating Card (Screenshot 1 top right) */}
-        <div className="absolute top-4 right-4 sm:right-8 z-20 pointer-events-none">
+        {/* Live Network Activity Floating Card (Desktop only, positioned in spacious top-right corner) */}
+        <div className="hidden sm:block absolute top-4 right-4 sm:right-8 z-20 pointer-events-none">
           <div className="px-4 py-3 rounded-2xl bg-white/90 dark:bg-[#14161B]/90 backdrop-blur-md border border-ethix-charcoal-200/80 dark:border-white/10 shadow-premium min-w-[210px] space-y-1">
             <div className="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-ethix-charcoal-500 dark:text-ethix-charcoal-400">
               <span className="w-2 h-2 rounded-full bg-ethix-red animate-ping" />
